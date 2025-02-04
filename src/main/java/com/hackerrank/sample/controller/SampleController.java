@@ -2,6 +2,7 @@ package com.hackerrank.sample.controller;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -61,41 +62,37 @@ public class SampleController {
 			
 			try {
 
+				// TODO: How do you take data from the restTemplate and convert it into your models?
+				// TODO: What is a JSONObject and how do you use it?
+				// TODO: What is a JSONArray and how do you use it?
+					// you need to loop through the length the JSONArray and use the getJSONObject method to
+				  // get the element
+				  // then you can use the model's constructor to convert the JSONObject props to the model
+				// convert JSONArray data into sortedProducts
+//				System.out.println("what is the data: " + data);
 				List<Product> productList = new ArrayList<>();
-
-				// Parse JSON data into Product objects
-				for (int i = 0; i < data.length(); i++) {
-					JSONObject jsonObject = data.getJSONObject(i);
-
+				for(int i = 0; i < data.length(); i++) {
+					JSONObject result = this.data.getJSONObject(i);
 					Product product = new Product();
-					product.setBarcode(jsonObject.optString("barcode"));
-					product.setCategory(jsonObject.optString("category"));
-					product.setPrice(jsonObject.getInt("price"));
-					product.setDiscount(jsonObject.getInt("discount"));
-					product.setAvailable(jsonObject.getInt("available"));
-
+					product.setPrice(result.getInt("price"));
+					product.setDiscount(result.getInt("discount"));
+					product.setItem(result.getString("name"));
 					productList.add(product);
 				}
 
-				// Sort products by price in ascending order
-				productList.sort((p1, p2) -> Integer.compare(p1.getPrice(), p2.getPrice()));
+				// TODO: how do you use the Comparator function
+				// TODO: how do you sort in java on array lists
+				;
 
-				// Map sorted products to SortedProducts
-				List<SortedProducts> sortedList = new ArrayList<>();
-				for (Product product : productList) {
-					sortedList.add(new SortedProducts(product.getBarcode()));
-				}
+				// TODO: map a list of Products into Sorted Products
 
-				// Convert list to array
-				SortedProducts[] sortedArray = sortedList.toArray(new SortedProducts[0]);
 
-				return new ResponseEntity<>(sortedArray, HttpStatus.OK);
-			    
-			}catch(Exception E)
-				{
-	   	System.out.println("Error encountered : "+E.getMessage());
-	    return new ResponseEntity<SortedProducts[]>(HttpStatus.NOT_FOUND);
-				}
+				return ResponseEntity.ok(productList.stream().sorted((p1, p2) -> Integer.compare(p1.getPrice(), p2.getPrice())).map( product -> new SortedProducts(product.getBarcode())).toArray(SortedProducts[]::new));
+
+			} catch(Exception E) {
+	   		System.out.println("Error encountered : "+E.getMessage());
+	    	return new ResponseEntity<SortedProducts[]>(HttpStatus.NOT_FOUND);
+			}
 			
 		}  
 		
