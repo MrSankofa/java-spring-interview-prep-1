@@ -1,11 +1,14 @@
 package com.hackerrank.sample.controller;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
+import com.hackerrank.sample.dto.Product;
+import com.hackerrank.sample.service.ProductService;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -16,35 +19,32 @@ import org.springframework.web.client.RestTemplate;
 
 import com.hackerrank.sample.dto.FilteredProducts;
 import com.hackerrank.sample.dto.SortedProducts;
-import com.hackerrank.sample.dto.Product;
 
 @RestController
 public class SampleController {
 
-	
-	   final String uri = "https://jsonmock.hackerrank.com/api/inventory";
-	   RestTemplate restTemplate = new RestTemplate();
-	   String result = restTemplate.getForObject(uri, String.class);			
-	   JSONObject root = new JSONObject(result);
-	   
-	   JSONArray data = root.getJSONArray("data");
-	   
-	   
-		
+
+	@Autowired
+	private ProductService productService;
+
 		@CrossOrigin
 		@GetMapping("/filter/price/{initial_price}/{final_price}")  
 		private ResponseEntity< ArrayList<FilteredProducts> > filtered_books(@PathVariable("initial_price") int init_price , @PathVariable("final_price") int final_price)   
 		{  
 			
 			try {
-				
-			
-					ArrayList<FilteredProducts> books = new ArrayList<FilteredProducts>();
-			
-				    return new ResponseEntity<ArrayList<FilteredProducts>>(books, HttpStatus.OK);
 
-			   
-			    
+				if (init_price > final_price) {
+					return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+				}
+
+				ArrayList<FilteredProducts> result = productService.getFilteredProducts(init_price, final_price);
+
+				if (result.size() == 0) {
+					return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+				}
+				    return new ResponseEntity<ArrayList<FilteredProducts>>(result, HttpStatus.OK);
+
 			}catch(Exception E)
 				{
 	   	System.out.println("Error encountered : "+E.getMessage());
@@ -56,18 +56,15 @@ public class SampleController {
 		
 		@CrossOrigin
 		@GetMapping("/sort/price")  
-		private ResponseEntity<SortedProducts[]> sorted_books()   
-		{  
+		private ResponseEntity<SortedProducts[]> sorted_books() {
 			
 			try {
+				return ResponseEntity.ok(productService.getAllSortedProductsAscending());
+			} catch(Exception E) {
 
-				return ResponseEntity.ok(new SortedProducts[] {});
-			    
-			}catch(Exception E)
-				{
-	   	System.out.println("Error encountered : "+E.getMessage());
-	    return new ResponseEntity<SortedProducts[]>(HttpStatus.NOT_FOUND);
-				}
+				System.out.println("Error encountered : "+E.getMessage());
+	    	return new ResponseEntity<SortedProducts[]>(HttpStatus.NOT_FOUND);
+			}
 			
 		}  
 		

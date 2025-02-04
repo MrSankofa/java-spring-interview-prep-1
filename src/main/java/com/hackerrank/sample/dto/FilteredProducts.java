@@ -16,9 +16,12 @@ public class FilteredProducts {
 	}
 
 	private String BarCode;
+
+	private int price;
 	
-	public FilteredProducts(String a) {
-		BarCode=a;
+	public FilteredProducts(String a, int price) {
+		BarCode = a;
+		this.price = price;
 	}
 
 
