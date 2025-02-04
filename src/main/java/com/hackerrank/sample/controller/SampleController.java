@@ -1,11 +1,14 @@
 package com.hackerrank.sample.controller;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
+import com.hackerrank.sample.dto.Product;
+import com.hackerrank.sample.service.ProductService;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -16,21 +19,14 @@ import org.springframework.web.client.RestTemplate;
 
 import com.hackerrank.sample.dto.FilteredProducts;
 import com.hackerrank.sample.dto.SortedProducts;
-import com.hackerrank.sample.dto.Product;
 
 @RestController
 public class SampleController {
 
-	
-	   final String uri = "https://jsonmock.hackerrank.com/api/inventory";
-	   RestTemplate restTemplate = new RestTemplate();
-	   String result = restTemplate.getForObject(uri, String.class);			
-	   JSONObject root = new JSONObject(result);
-	   
-	   JSONArray data = root.getJSONArray("data");
-	   
-	   
-		
+
+	@Autowired
+	private ProductService productService;
+
 		@CrossOrigin
 		@GetMapping("/filter/price/{initial_price}/{final_price}")  
 		private ResponseEntity< ArrayList<FilteredProducts> > filtered_books(@PathVariable("initial_price") int init_price , @PathVariable("final_price") int final_price)   
@@ -61,7 +57,13 @@ public class SampleController {
 			
 			try {
 
-				return ResponseEntity.ok(new SortedProducts[] {});
+				List<Product> products = productService.getAllProducts();
+
+				return ResponseEntity.ok(products.stream()
+						.sorted(Comparator.comparingInt(Product::getPrice))
+						.map( product -> new SortedProducts(product.getBarcode()))
+						.toArray(SortedProducts[]::new)
+				);
 			    
 			}catch(Exception E)
 				{
