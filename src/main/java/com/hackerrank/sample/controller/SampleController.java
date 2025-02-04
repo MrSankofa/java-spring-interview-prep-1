@@ -73,13 +73,16 @@ public class SampleController {
 
 
 
-				List<Product> products = this.productService.getProductsSortedByPrice();
-				return ResponseEntity.ok(products.toArray(new SortedProducts[] {}));
-
-			} catch(Exception E) {
-	   		System.out.println("Error encountered : "+E.getMessage());
-	    	return new ResponseEntity<SortedProducts[]>(HttpStatus.NOT_FOUND);
-			}
+				List<Product> products = productService.getProductsSortedByPrice();
+				return ResponseEntity.ok(
+						products.stream()
+								.map( product -> new SortedProducts(product.getBarcode()))
+								.toArray( SortedProducts[]::new)
+				);
+			}catch(Exception E) {
+				System.out.println("Error encountered : "+E.getMessage());
+				return new ResponseEntity<SortedProducts[]>(HttpStatus.NOT_FOUND);
+				}
 			
 		}  
 		

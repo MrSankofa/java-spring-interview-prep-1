@@ -28,8 +28,7 @@ public class ProductService {
       Product product = new Product();
       product.setPrice(result.getInt("price"));
       product.setDiscount(result.getInt("discount"));
-      product.setItem(result.getString("name"));
-      product.setBarcode(result.getString("barcode"));
+      product.setBarcode(result.optString("barcode"));
       productList.add(product);
     }
 
