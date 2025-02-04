@@ -33,14 +33,18 @@ public class SampleController {
 		{  
 			
 			try {
-				
-			
-					ArrayList<FilteredProducts> books = new ArrayList<FilteredProducts>();
-			
-				    return new ResponseEntity<ArrayList<FilteredProducts>>(books, HttpStatus.OK);
 
-			   
-			    
+				if (init_price > final_price) {
+					return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+				}
+
+				ArrayList<FilteredProducts> result = productService.getFilteredProducts(init_price, final_price);
+
+				if (result.size() == 0) {
+					return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+				}
+				    return new ResponseEntity<ArrayList<FilteredProducts>>(result, HttpStatus.OK);
+
 			}catch(Exception E)
 				{
 	   	System.out.println("Error encountered : "+E.getMessage());
@@ -55,7 +59,6 @@ public class SampleController {
 		private ResponseEntity<SortedProducts[]> sorted_books() {
 			
 			try {
-
 				return ResponseEntity.ok(productService.getAllSortedProductsAscending());
 			} catch(Exception E) {
 
