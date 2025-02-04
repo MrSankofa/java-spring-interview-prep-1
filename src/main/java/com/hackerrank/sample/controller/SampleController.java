@@ -52,24 +52,16 @@ public class SampleController {
 		
 		@CrossOrigin
 		@GetMapping("/sort/price")  
-		private ResponseEntity<SortedProducts[]> sorted_books()   
-		{  
+		private ResponseEntity<SortedProducts[]> sorted_books() {
 			
 			try {
 
-				List<Product> products = productService.getAllProducts();
+				return ResponseEntity.ok(productService.getAllSortedProductsAscending());
+			} catch(Exception E) {
 
-				return ResponseEntity.ok(products.stream()
-						.sorted(Comparator.comparingInt(Product::getPrice))
-						.map( product -> new SortedProducts(product.getBarcode()))
-						.toArray(SortedProducts[]::new)
-				);
-			    
-			}catch(Exception E)
-				{
-	   	System.out.println("Error encountered : "+E.getMessage());
-	    return new ResponseEntity<SortedProducts[]>(HttpStatus.NOT_FOUND);
-				}
+				System.out.println("Error encountered : "+E.getMessage());
+	    	return new ResponseEntity<SortedProducts[]>(HttpStatus.NOT_FOUND);
+			}
 			
 		}  
 		

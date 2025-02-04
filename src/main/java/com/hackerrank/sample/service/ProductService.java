@@ -2,6 +2,7 @@ package com.hackerrank.sample.service;
 
 
 import com.hackerrank.sample.dto.Product;
+import com.hackerrank.sample.dto.SortedProducts;
 import com.hackerrank.sample.repository.ProductRepository;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -33,6 +35,13 @@ public class ProductService {
     }
 
     return products;
+  }
+
+  public SortedProducts[] getAllSortedProductsAscending() {
+    return getAllProducts().stream()
+        .sorted(Comparator.comparingInt(Product::getPrice))
+        .map( product -> new SortedProducts(product.getBarcode()))
+        .toArray(SortedProducts[]::new);
   }
 
 
