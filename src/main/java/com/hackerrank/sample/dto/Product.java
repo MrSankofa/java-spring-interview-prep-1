@@ -1,5 +1,9 @@
 package com.hackerrank.sample.dto;
 
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
+
 public class Product {
   private String item;
   private int price;
@@ -10,6 +14,17 @@ public class Product {
   private int available;
   private String category;
   private String barcode;
+
+
+  public URI getLocationURI() {
+    return locationURI;
+  }
+
+  public void setLocationURI(URI locationURI) {
+    this.locationURI = locationURI;
+  }
+
+  private URI locationURI;
 
   public Product(String item, int price, int discount, int available, String category, String barcode) {
     this.item = item;
@@ -68,5 +83,18 @@ public class Product {
 
   public int getAvailable() {
     return available;
+  }
+
+  public void generateLocationURI() {
+    try {
+      locationURI = new URI(
+          ServletUriComponentsBuilder.fromCurrentContextPath()
+              .path("/product/")
+              .path(getBarcode())
+              .toUriString()
+      );
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
 }

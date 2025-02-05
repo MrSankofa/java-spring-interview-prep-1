@@ -30,14 +30,7 @@ public class ProductService {
     List<Product> products = new ArrayList<>();
     for(int i = 0; i < result.length(); i++) {
       JSONObject jsonObject = result.getJSONObject(i);
-
-      Product product = new Product();
-      product.setItem(jsonObject.optString("name"));
-      product.setPrice(jsonObject.optInt("price"));
-      product.setBarcode(jsonObject.optString("barcode"));
-      product.setDiscount(jsonObject.optInt("discount"));
-      product.setAvailable(jsonObject.optInt("available"));
-      products.add(product);
+      products.add(convertToProduct(new Product(), jsonObject));
 
     }
 
@@ -90,6 +83,23 @@ public class ProductService {
 
     ArrayList<FilteredProducts> filteredProductsArray = new ArrayList<>(filteredProducts);
     return filteredProductsArray;
+  }
+
+  public Product createProduct(Product product) {
+    JSONObject result = productRepository.createProduct(product);
+
+    return convertToProduct(product, result);
+  }
+
+  private static Product convertToProduct(Product product, JSONObject result) {
+
+    product.setItem(result.optString("item"));
+    product.setPrice(result.optInt("price"));
+    product.setBarcode(result.optString("barcode"));
+    product.setDiscount(result.optInt("discount"));
+    product.setAvailable(result.optInt("available"));
+    product.generateLocationURI();
+    return product;
   }
 
 

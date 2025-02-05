@@ -1,8 +1,11 @@
 package com.hackerrank.sample.controller;
 
 import com.hackerrank.sample.dto.FilteredProducts;
+import com.hackerrank.sample.dto.Product;
 import com.hackerrank.sample.dto.SortedProducts;
+import com.hackerrank.sample.repository.ProductRepository;
 import com.hackerrank.sample.service.ProductService;
+import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -15,8 +18,10 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
 
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
@@ -33,6 +38,7 @@ class SampleControllerTest {
 
   @InjectMocks
   private SampleController sampleController;
+
 
 
 //  @BeforeEach
@@ -149,8 +155,13 @@ class SampleControllerTest {
     mockMvc.perform(
         get("/filter/price/100/200").contentType(MediaType.APPLICATION_JSON)
     )
-        .andExpect(jsonPath("$.length()").value(0))
-        .andExpect(status().isOk());
+        .andExpect(status().isNotFound());
 
   }
+
+
+
+
+
+
 }

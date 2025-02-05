@@ -39,7 +39,7 @@ class ProductServiceTest {
     mockJsonArray = new JSONArray();
 
     mockJsonArray.put(new JSONObject().put("id", 1)
-        .put("name", "Product A")
+        .put("item", "Product A")
         .put("barcode", "38472374")
         .put("price", "909")
         .put("discount", "7")
@@ -47,7 +47,7 @@ class ProductServiceTest {
     );
     mockJsonArray.put(new JSONObject()
         .put("id", 2)
-        .put("name", "Product B")
+        .put("item", "Product B")
         .put("barcode", "74002423")
         .put("price", "3548")
         .put("discount", "12")
@@ -86,7 +86,7 @@ class ProductServiceTest {
   void getSortedProducts() throws JSONException {
     mockJsonArray.put(new JSONObject()
         .put("id", 3)
-        .put("name", "Product C")
+        .put("item", "Product C")
         .put("barcode", "12345678")
         .put("price", "1")
         .put("discount", "12")
@@ -107,8 +107,8 @@ class ProductServiceTest {
   @Test
   void testGetSortedProducts_HandleNullPrice() throws JSONException {
 
-    mockJsonArray.put(new JSONObject().put("id", 3).put("name", "Product C").put("barcode", "1111").put("price", 30));
-    mockJsonArray.put(new JSONObject().put("id", 4).put("name", "Product D").put("barcode", "2222").put("price", JSONObject.NULL)); // Null price
+    mockJsonArray.put(new JSONObject().put("id", 3).put("item", "Product C").put("barcode", "1111").put("price", 30));
+    mockJsonArray.put(new JSONObject().put("id", 4).put("item", "Product D").put("barcode", "2222").put("price", JSONObject.NULL)); // Null price
 
     when(productRepository.getAllProducts()).thenReturn(mockJsonArray);
 
@@ -122,8 +122,8 @@ class ProductServiceTest {
   @Test
   void testGetSortedProducts_HandleNonNumericPrice() throws JSONException {
 
-    mockJsonArray.put(new JSONObject().put("id", 3).put("name", "Product C").put("barcode", "1111").put("price", "not_a_number"));
-    mockJsonArray.put(new JSONObject().put("id", 4).put("name", "Product D").put("barcode", "2222").put("price", "20"));
+    mockJsonArray.put(new JSONObject().put("id", 3).put("item", "Product C").put("barcode", "1111").put("price", "not_a_number"));
+    mockJsonArray.put(new JSONObject().put("id", 4).put("item", "Product D").put("barcode", "2222").put("price", "20"));
 
     when(productRepository.getAllProducts()).thenReturn(mockJsonArray);
 
@@ -137,16 +137,17 @@ class ProductServiceTest {
 
   @Test
   void getFilteredProducts_success() throws JSONException {
-    mockJsonArray.put(new JSONObject().put("id", 3).put("name", "Product C").put("barcode", "1111").put("price", 30));
-    mockJsonArray.put(new JSONObject().put("id", 4).put("name", "Product D").put("barcode", "2222").put("price", 40)); // Null price
+    mockJsonArray.put(new JSONObject().put("id", 3).put("item", "Product C").put("barcode", "1111").put("price", 30));
+    mockJsonArray.put(new JSONObject().put("id", 4).put("item", "Product D").put("barcode", "2222").put("price", 40)); // Null price
 
     when(productRepository.getAllProducts()).thenReturn(mockJsonArray);
 
     assertEquals(2, productService.getFilteredProducts(30, 40).size());
   }
 
-  @Test
-  void getFilteredProducts_empty() {
-  }
+  // TODO: write filtered Products empty test
+//  @Test
+//  void getFilteredProducts_empty() {
+//  }
 
 }
