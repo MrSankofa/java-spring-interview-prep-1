@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -93,13 +94,35 @@ public class ProductService {
 
   private static Product convertToProduct(Product product, JSONObject result) {
 
+    product.setId(result.optString("_id"));
     product.setItem(result.optString("item"));
     product.setPrice(result.optInt("price"));
     product.setBarcode(result.optString("barcode"));
     product.setDiscount(result.optInt("discount"));
     product.setAvailable(result.optInt("available"));
+    product.setCategory(result.optString("category"));
     product.generateLocationURI();
     return product;
+  }
+
+  public Optional<Product> getProduct(String id) {
+    JSONObject target = productRepository.getProduct(id);
+
+    if(target == null) {
+      return Optional.empty();
+    } else {
+      return Optional.of(convertToProduct(new Product(), target));
+    }
+  }
+
+  public void deleteProduct(String id) {
+    productRepository.deleteProduct(id);
+  }
+
+  public List<Product> getMinPriceProducts(int minPrice) {
+    List<Product> result = getAllProducts();
+
+    return result.stream().filter( product -> product.getPrice() >= minPrice).collect(Collectors.toList());
   }
 
 

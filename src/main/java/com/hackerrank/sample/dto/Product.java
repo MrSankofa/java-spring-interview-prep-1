@@ -9,6 +9,8 @@ public class Product {
   private int price;
   private int discount;
 
+  private String id;
+
 
 
   private int available;
@@ -85,12 +87,20 @@ public class Product {
     return available;
   }
 
+  public String getId() {
+    return id;
+  }
+
+  public void setId(String id) {
+    this.id = id;
+  }
+
   public void generateLocationURI() {
     try {
       locationURI = new URI(
           ServletUriComponentsBuilder.fromCurrentContextPath()
               .path("/product/")
-              .path(getBarcode())
+              .path(getId())
               .toUriString()
       );
     } catch (Exception e) {

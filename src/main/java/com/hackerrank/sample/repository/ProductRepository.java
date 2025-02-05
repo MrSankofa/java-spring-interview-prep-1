@@ -40,4 +40,16 @@ public class ProductRepository {
     return root;
   }
 
+  public JSONObject getProduct(String id) {
+    String response = restTemplate.getForObject(crud_uri + apiKey + "/Product/" + id, String.class);
+
+    JSONObject root = new JSONObject(response);
+
+    return root;
+  }
+
+  public void deleteProduct(String id) {
+    restTemplate.delete(crud_uri + apiKey + "/Product/" + id);
+  }
+
 }

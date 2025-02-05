@@ -3,6 +3,7 @@ package com.hackerrank.sample.controller;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import com.hackerrank.sample.service.ProductService;
 import org.json.JSONArray;
@@ -80,4 +81,55 @@ public class SampleController {
 				return new ResponseEntity<SortedProducts[]>(HttpStatus.NOT_FOUND);
 			}
 		}
+
+		@CrossOrigin
+		@DeleteMapping("/product/{id}")
+		private ResponseEntity<?> deleteProduct(@PathVariable("id") String id) {
+			// see if the product exists
+			Optional<Product> product = productService.getProduct(id);
+
+			if(product.isPresent()) {
+				// delete the product
+				productService.deleteProduct(id);
+			} else {
+				// if not return not found
+				return ResponseEntity.notFound().build();
+			}
+
+
+
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+		}
+
+		@CrossOrigin
+		@GetMapping("/product/{id}")
+		private ResponseEntity<?> getProduct(@PathVariable("id") String id) {
+			try {
+				Optional<Product> product = productService.getProduct(id);
+				if(product.isPresent()) {
+					return ResponseEntity.ok(product.get());
+				} else {
+					return ResponseEntity.notFound().build();
+				}
+
+			} catch (Exception e) {
+				return ResponseEntity.notFound().build();
+			}
+		}
+
+		@CrossOrigin
+		@GetMapping("/products")
+		private ResponseEntity<?> getProducts(@RequestParam(required = false) int minPrice) {
+			try {
+				List<Product> products = productService.getMinPriceProducts(minPrice);
+				if(products.isEmpty()) {
+					return ResponseEntity.notFound().build();
+				} else {
+					return ResponseEntity.ok(products);
+				}
+			} catch (Exception e) {
+				return ResponseEntity.notFound().build();
+			}
+		}
+
 }
