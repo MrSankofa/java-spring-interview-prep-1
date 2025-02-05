@@ -2,6 +2,7 @@ package com.hackerrank.sample.service;
 
 
 import com.hackerrank.sample.dto.Product;
+import com.hackerrank.sample.dto.SortedProducts;
 import com.hackerrank.sample.repository.ProductRepository;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -38,6 +39,10 @@ public class ProductService {
     }
 
     return products;
+  }
+
+  public SortedProducts[] getSortedProducts() {
+    return new SortedProducts[]{};
   }
 
 

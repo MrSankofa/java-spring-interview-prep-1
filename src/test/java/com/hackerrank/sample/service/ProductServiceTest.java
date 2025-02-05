@@ -1,10 +1,12 @@
 package com.hackerrank.sample.service;
 
 import com.hackerrank.sample.dto.Product;
+import com.hackerrank.sample.dto.SortedProducts;
 import com.hackerrank.sample.repository.ProductRepository;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -30,11 +32,13 @@ class ProductServiceTest {
   @InjectMocks
   private ProductService productService;
 
-  @Test
-  void getAllProducts() throws JSONException {
-    JSONArray mockJsonArray = new JSONArray();
-    mockJsonArray.put(new JSONObject()
-        .put("id", 1)
+  JSONArray mockJsonArray;
+
+  @BeforeEach
+  void setUp() throws JSONException {
+    mockJsonArray = new JSONArray();
+
+    mockJsonArray.put(new JSONObject().put("id", 1)
         .put("name", "Product A")
         .put("barcode", "38472374")
         .put("price", "909")
@@ -50,10 +54,15 @@ class ProductServiceTest {
         .put("available", "1")
     );
 
-    when(productRepository.getAllProducts())
-        .thenReturn(mockJsonArray);
 
 
+    when(productRepository.getAllProducts()).thenReturn(mockJsonArray);
+
+  }
+
+
+  @Test
+  void getAllProducts() {
     List<Product> underTestProducts = productService.getAllProducts();
 
     assertEquals(2, underTestProducts.size());
@@ -71,5 +80,23 @@ class ProductServiceTest {
     assertEquals(1, underTestProducts.get(1).getAvailable());
 
     verify(productRepository, times(1)).getAllProducts();
+  }
+
+  @Test
+  void getSortedProducts() throws JSONException {
+    mockJsonArray.put(new JSONObject()
+        .put("id", 3)
+        .put("name", "Product C")
+        .put("barcode", "12345678")
+        .put("price", "1")
+        .put("discount", "12")
+        .put("available", "1")
+    );
+
+    SortedProducts[] underTestSortedProducts = productService.getSortedProducts();
+
+    assertEquals(3, underTestSortedProducts.length);
+    assertEquals("12345678", underTestSortedProducts[0].getBarCode());
+
   }
 }

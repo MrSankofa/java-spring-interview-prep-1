@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.hackerrank.sample.service.ProductService;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -22,12 +24,8 @@ import com.hackerrank.sample.dto.Product;
 public class SampleController {
 
 	
-	   final String uri = "https://jsonmock.hackerrank.com/api/inventory";
-	   RestTemplate restTemplate = new RestTemplate();
-	   String result = restTemplate.getForObject(uri, String.class);			
-	   JSONObject root = new JSONObject(result);
-	   
-	   JSONArray data = root.getJSONArray("data");
+	   @Autowired
+		 ProductService productService;
 	   
 	   
 		
