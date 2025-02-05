@@ -106,7 +106,7 @@ class ProductServiceTest {
 
   @Test
   void testGetSortedProducts_HandleNullPrice() throws JSONException {
-    JSONArray mockJsonArray = new JSONArray();
+
     mockJsonArray.put(new JSONObject().put("id", 3).put("name", "Product C").put("barcode", "1111").put("price", 30));
     mockJsonArray.put(new JSONObject().put("id", 4).put("name", "Product D").put("barcode", "2222").put("price", JSONObject.NULL)); // Null price
 
@@ -121,9 +121,9 @@ class ProductServiceTest {
 
   @Test
   void testGetSortedProducts_HandleNonNumericPrice() throws JSONException {
-    JSONArray mockJsonArray = new JSONArray();
-    mockJsonArray.put(new JSONObject().put("id", 3).put("name", "Product A").put("barcode", "1111").put("price", "not_a_number"));
-    mockJsonArray.put(new JSONObject().put("id", 4).put("name", "Product B").put("barcode", "2222").put("price", "20"));
+
+    mockJsonArray.put(new JSONObject().put("id", 3).put("name", "Product C").put("barcode", "1111").put("price", "not_a_number"));
+    mockJsonArray.put(new JSONObject().put("id", 4).put("name", "Product D").put("barcode", "2222").put("price", "20"));
 
     when(productRepository.getAllProducts()).thenReturn(mockJsonArray);
 
@@ -134,4 +134,19 @@ class ProductServiceTest {
     assertDoesNotThrow(() -> productService.getSortedProducts());
     verify(productRepository, times(1)).getAllProducts();
   }
+
+  @Test
+  void getFilteredProducts_success() throws JSONException {
+    mockJsonArray.put(new JSONObject().put("id", 3).put("name", "Product C").put("barcode", "1111").put("price", 30));
+    mockJsonArray.put(new JSONObject().put("id", 4).put("name", "Product D").put("barcode", "2222").put("price", 40)); // Null price
+
+    when(productRepository.getAllProducts()).thenReturn(mockJsonArray);
+
+    assertEquals(2, productService.getFilteredProducts(30, 40).size());
+  }
+
+  @Test
+  void getFilteredProducts_empty() {
+  }
+
 }

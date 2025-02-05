@@ -1,5 +1,6 @@
 package com.hackerrank.sample.controller;
 
+import com.hackerrank.sample.dto.FilteredProducts;
 import com.hackerrank.sample.dto.SortedProducts;
 import com.hackerrank.sample.service.ProductService;
 import org.junit.jupiter.api.Test;
@@ -11,6 +12,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.ArrayList;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -94,5 +97,59 @@ class SampleControllerTest {
         get("/sort/price").contentType(MediaType.APPLICATION_JSON)
     )
         .andExpect(status().isNotFound());
+  }
+
+  @Test
+  void testFilteredBooks_HandleCORS() throws Exception {
+    mockMvc.perform(
+        get("/filter/price/100/200")
+            .contentType(MediaType.APPLICATION_JSON)
+            .header("Origin", "https://example.com")
+    ).andExpect(header().exists("Access-Control-Allow-Origin"));
+  }
+
+  @Test
+  void testFilteredBooks_Success() throws Exception {
+    ArrayList<FilteredProducts> filteredProducts = new ArrayList<>();
+    filteredProducts.add(new FilteredProducts("1231238", 1));
+    filteredProducts.add(new FilteredProducts("1231239", 100));
+    filteredProducts.add(new FilteredProducts("12312310", 200));
+    filteredProducts.add(new FilteredProducts("12312311", 300));
+
+    mockMvc.perform(
+        get("/filter/price/100/200")
+            .contentType(MediaType.APPLICATION_JSON)
+    )
+        .andExpect(jsonPath("$.length()").value(2))
+        .andExpect(jsonPath("$[0].barCode").value("1231239"))
+        .andExpect(jsonPath("$[1].barCode").value("12312310"))
+        ;
+  }
+
+  @Test
+  void testFilteredBooks_BadRequest() throws Exception {
+    mockMvc.perform(
+        get("/filter/price/100/99")
+    ).andExpect(status().isBadRequest());
+  }
+
+//  @Test
+//  void testFilteredBooks_BadRequest2() throws Exception {
+//    mockMvc.perform(
+//        get("/filter/price/100/100")
+//    ).andExpect(status().isBadRequest());
+//  }
+
+  @Test
+  void testFilteredBooks_Empty() throws Exception {
+    ArrayList<FilteredProducts> filteredProducts = new ArrayList<>();
+    when(productService.getFilteredProducts(3, 4)).thenReturn(filteredProducts);
+
+    mockMvc.perform(
+        get("/filter/price/100/200").contentType(MediaType.APPLICATION_JSON)
+    )
+        .andExpect(jsonPath("$.length()").value(0))
+        .andExpect(status().isOk());
+
   }
 }

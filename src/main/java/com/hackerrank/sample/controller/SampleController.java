@@ -35,15 +35,17 @@ public class SampleController {
 		{  
 			
 			try {
-				
+
+				if(init_price > final_price) {
+					return ResponseEntity.badRequest().body(new ArrayList<>());
+				}
+
 			
-					ArrayList<FilteredProducts> books = new ArrayList<FilteredProducts>();
-			
-				    return new ResponseEntity<ArrayList<FilteredProducts>>(books, HttpStatus.OK);
+				return ResponseEntity.ok(productService.getFilteredProducts(init_price, final_price));
 
 			   
 			    
-			}catch(Exception E)
+			} catch(Exception E)
 				{
 	   	System.out.println("Error encountered : "+E.getMessage());
 	    return new ResponseEntity<ArrayList<FilteredProducts>>(HttpStatus.NOT_FOUND);

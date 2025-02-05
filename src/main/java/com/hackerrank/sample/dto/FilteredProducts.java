@@ -16,9 +16,20 @@ public class FilteredProducts {
 	}
 
 	private String BarCode;
-	
-	public FilteredProducts(String a) {
+
+	public int getPrice() {
+		return price;
+	}
+
+	public void setPrice(int price) {
+		this.price = price;
+	}
+
+	private int price;
+
+	public FilteredProducts(String a, int price) {
 		BarCode=a;
+		price = price;
 	}
 
 

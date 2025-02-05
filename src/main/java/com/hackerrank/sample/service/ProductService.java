@@ -1,6 +1,7 @@
 package com.hackerrank.sample.service;
 
 
+import com.hackerrank.sample.dto.FilteredProducts;
 import com.hackerrank.sample.dto.Product;
 import com.hackerrank.sample.dto.SortedProducts;
 import com.hackerrank.sample.repository.ProductRepository;
@@ -64,6 +65,31 @@ public class ProductService {
     SortedProducts[] sortedProductsArray = sortedProducts.toArray(new SortedProducts[sortedProducts.size()]);
 
     return sortedProductsArray;
+  }
+
+  public ArrayList<FilteredProducts> getFilteredProducts(int init_price, int final_price) {
+    // int initial and final price, need to get all products from the API
+    // return is an ArrayList of FilteredProducts
+    // given some JSONArray with JSONObjects convert those to a List of Products
+    //
+
+    // getAllProducts
+    // filterProducts based on initial and final price
+    // map List of Products to List of FilteredProducts
+    // convert List to ArrayList
+
+    List<Product> products = getAllProducts().stream()
+        .filter( product -> product.getPrice() >= init_price && product.getPrice() <= final_price)
+        .collect(Collectors.toList()
+    );
+
+    List<FilteredProducts> filteredProducts = products.stream().map( product ->
+        new FilteredProducts(product.getBarcode(), product.getPrice()))
+        .collect(Collectors.toList()
+    );
+
+    ArrayList<FilteredProducts> filteredProductsArray = new ArrayList<>(filteredProducts);
+    return filteredProductsArray;
   }
 
 
