@@ -4,6 +4,9 @@ public class Product {
   private String item;
   private int price;
   private int discount;
+
+
+
   private int available;
   private String category;
   private String barcode;
@@ -61,5 +64,9 @@ public class Product {
 
   public void setAvailable(int available) {
     this.available = available;
+  }
+
+  public int getAvailable() {
+    return available;
   }
 }
