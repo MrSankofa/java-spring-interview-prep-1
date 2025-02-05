@@ -49,14 +49,14 @@ public class ProductService {
   public ArrayList<FilteredProducts> getFilteredProducts(int minPrice, int maxPrice) {
     ArrayList<FilteredProducts> filteredProducts = new ArrayList<>();
 
-    getAllProducts().stream()
-        .filter(product -> product.getPrice() >= minPrice && product.getPrice() <= maxPrice)
-        .forEach( product -> {
-          FilteredProducts fp = new FilteredProducts(product.getBarcode(), product.getPrice());
-          filteredProducts.add(fp);
-        });
-
-    return filteredProducts;
+    return new ArrayList<>(
+        getAllProducts().stream()
+            .filter(product -> product.getPrice() >= minPrice && product.getPrice() <= maxPrice)
+            .map( product -> {
+              return new FilteredProducts(product.getBarcode(), product.getPrice());
+            })
+            .collect(Collectors.toList())
+    );
 
   }
 
