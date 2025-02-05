@@ -10,7 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 // TODO: recall what is a service, repository, configuration, controller, restController annotation? What does it do? Why do we use it?
@@ -42,7 +44,26 @@ public class ProductService {
   }
 
   public SortedProducts[] getSortedProducts() {
-    return new SortedProducts[]{};
+    // no explicit parameters, need to get all the products from the API, previous test make sure this matches the model/DTOs we expect
+    // Return requires a change from a list of Products to an array of Sorted Products
+    // so give ArrayList<Products> mapped to SortedProducts[] (only has barcode in its properties)
+
+    // first getAllProducts
+    // sort them in ascending order
+    // map those sorted Products to SortedProducts
+    // convert the sorted list of Products to an array of SortedProducts[]
+
+    List<Product> products = getAllProducts().stream()
+        .sorted( Comparator.comparingInt(Product::getPrice))
+        .collect(Collectors.toList());
+
+    List<SortedProducts> sortedProducts = products.stream()
+        .map( product -> new SortedProducts( product.getBarcode()))
+        .collect(Collectors.toList());
+
+    SortedProducts[] sortedProductsArray = sortedProducts.toArray(new SortedProducts[sortedProducts.size()]);
+
+    return sortedProductsArray;
   }
 
 
