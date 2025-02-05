@@ -18,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
+// Testing the conversion from string to JSONArray
 @ExtendWith(MockitoExtension.class)
 class ProductRepositoryTest {
 

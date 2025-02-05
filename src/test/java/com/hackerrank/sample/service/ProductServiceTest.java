@@ -17,6 +17,8 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+// Testing conversion from JSONArray to list of DTO/Models
+
 @ExtendWith(MockitoExtension.class)
 class ProductServiceTest {
 
