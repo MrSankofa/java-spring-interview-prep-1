@@ -49,26 +49,20 @@ public class SampleController {
 	    return new ResponseEntity<ArrayList<FilteredProducts>>(HttpStatus.NOT_FOUND);
 				}
 			
-		}  
-		
-		
+		}
+
+
 		@CrossOrigin
-		@GetMapping("/sort/price")  
-		private ResponseEntity<SortedProducts[]> sorted_books()   
-		{  
-			
+		@GetMapping("/sort/price")
+		private ResponseEntity<SortedProducts[]> sorted_books() {
+
 			try {
 
-				return ResponseEntity.ok(new SortedProducts[] {});
-			    
-			}catch(Exception E)
-				{
-	   	System.out.println("Error encountered : "+E.getMessage());
-	    return new ResponseEntity<SortedProducts[]>(HttpStatus.NOT_FOUND);
-				}
-			
-		}  
-		
-		
-	
+				return ResponseEntity.ok(productService.getSortedProducts());
+
+			} catch(Exception E) {
+				System.out.println("Error encountered : "+E.getMessage());
+				return new ResponseEntity<SortedProducts[]>(HttpStatus.NOT_FOUND);
+			}
+		}
 }
