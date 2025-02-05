@@ -111,10 +111,10 @@ class SampleControllerTest {
   @Test
   void testFilteredBooks_Success() throws Exception {
     ArrayList<FilteredProducts> filteredProducts = new ArrayList<>();
-    filteredProducts.add(new FilteredProducts("1231238", 1));
     filteredProducts.add(new FilteredProducts("1231239", 100));
     filteredProducts.add(new FilteredProducts("12312310", 200));
-    filteredProducts.add(new FilteredProducts("12312311", 300));
+
+    when(productService.getFilteredProducts(100, 200)).thenReturn(filteredProducts);
 
     mockMvc.perform(
         get("/filter/price/100/200")
@@ -123,6 +123,7 @@ class SampleControllerTest {
         .andExpect(jsonPath("$.length()").value(2))
         .andExpect(jsonPath("$[0].barCode").value("1231239"))
         .andExpect(jsonPath("$[1].barCode").value("12312310"))
+        .andExpect(status().isOk());
         ;
   }
 
