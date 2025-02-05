@@ -32,10 +32,10 @@ public class ProductService {
 
       Product product = new Product();
       product.setItem(jsonObject.optString("name"));
-      product.setPrice(jsonObject.getInt("price"));
+      product.setPrice(jsonObject.optInt("price"));
       product.setBarcode(jsonObject.optString("barcode"));
-      product.setDiscount(jsonObject.getInt("discount"));
-      product.setAvailable(jsonObject.getInt("available"));
+      product.setDiscount(jsonObject.optInt("discount"));
+      product.setAvailable(jsonObject.optInt("available"));
       products.add(product);
 
     }

@@ -107,28 +107,31 @@ class ProductServiceTest {
   @Test
   void testGetSortedProducts_HandleNullPrice() throws JSONException {
     JSONArray mockJsonArray = new JSONArray();
-    mockJsonArray.put(new JSONObject().put("id", 1).put("name", "Product C").put("barcode", "1111").put("price", 30));
-    mockJsonArray.put(new JSONObject().put("id", 2).put("name", "Product D").put("barcode", "2222").put("price", JSONObject.NULL)); // Null price
+    mockJsonArray.put(new JSONObject().put("id", 3).put("name", "Product C").put("barcode", "1111").put("price", 30));
+    mockJsonArray.put(new JSONObject().put("id", 4).put("name", "Product D").put("barcode", "2222").put("price", JSONObject.NULL)); // Null price
 
     when(productRepository.getAllProducts()).thenReturn(mockJsonArray);
 
-    Exception exception = assertThrows(NullPointerException.class, () -> productService.getSortedProducts());
-
-    assertNotNull(exception);
+//    Exception exception = assertThrows(NullPointerException.class, () -> productService.getSortedProducts());
+//
+//    assertNotNull(exception);
+    assertDoesNotThrow(() -> productService.getSortedProducts());
     verify(productRepository, times(1)).getAllProducts();
   }
 
   @Test
   void testGetSortedProducts_HandleNonNumericPrice() throws JSONException {
     JSONArray mockJsonArray = new JSONArray();
-    mockJsonArray.put(new JSONObject().put("id", 1).put("name", "Product A").put("barcode", "1111").put("price", "not_a_number"));
-    mockJsonArray.put(new JSONObject().put("id", 2).put("name", "Product B").put("barcode", "2222").put("price", "20"));
+    mockJsonArray.put(new JSONObject().put("id", 3).put("name", "Product A").put("barcode", "1111").put("price", "not_a_number"));
+    mockJsonArray.put(new JSONObject().put("id", 4).put("name", "Product B").put("barcode", "2222").put("price", "20"));
 
     when(productRepository.getAllProducts()).thenReturn(mockJsonArray);
 
-    Exception exception = assertThrows(NumberFormatException.class, () -> productService.getSortedProducts());
+//    Exception exception = assertThrows(JSONException.class, () -> productService.getSortedProducts());
+//
+//    assertNotNull(exception);
 
-    assertNotNull(exception);
+    assertDoesNotThrow(() -> productService.getSortedProducts());
     verify(productRepository, times(1)).getAllProducts();
   }
 }
