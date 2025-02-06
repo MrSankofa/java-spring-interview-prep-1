@@ -17,11 +17,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 
 @WebMvcTest(controllers = SampleController.class)
-@ExtendWith(MockitoExtension.class)
 public class SampleControllerTest {
 
   @Autowired
@@ -30,11 +30,10 @@ public class SampleControllerTest {
   @MockBean // mock won't work why
   private ProductService productService;
 
-  @InjectMocks
-  private SampleController sampleController;
 
-
-
+//  @BeforeEach
+//  void setUp() {
+//  }
 
   @Test
   public void sorted_books_success() throws Exception {
@@ -47,12 +46,13 @@ public class SampleControllerTest {
 
     when(productService.getAllSortedProducts()).thenReturn(mockedProducts);
 
-    // act
-
     mockMvc.perform(
-        get("/sort/price").contentType(MediaType.APPLICATION_JSON)
-    ).andExpect(jsonPath("$[0].barcode").value("12345678"));
-
+            get("/sort/price").contentType(MediaType.APPLICATION_JSON)
+        )
+        .andDo(print())
+        .andExpect(jsonPath("$.length()").value(2))
+        .andExpect(jsonPath("$[0].barCode").value("12345678"))
+        .andExpect(jsonPath("$[1].barCode").value("12345679"));
   }
 
 }
