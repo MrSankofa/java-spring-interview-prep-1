@@ -1,8 +1,6 @@
 package com.hackerrank.sample.controller;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -16,7 +14,6 @@ import org.springframework.web.client.RestTemplate;
 
 import com.hackerrank.sample.dto.FilteredProducts;
 import com.hackerrank.sample.dto.SortedProducts;
-import com.hackerrank.sample.dto.Product;
 
 @RestController
 public class SampleController {
