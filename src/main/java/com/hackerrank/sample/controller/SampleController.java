@@ -2,8 +2,10 @@ package com.hackerrank.sample.controller;
 
 import java.util.ArrayList;
 
+import com.hackerrank.sample.service.ProductService;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -18,15 +20,10 @@ import com.hackerrank.sample.dto.SortedProducts;
 @RestController
 public class SampleController {
 
-	
-	   final String uri = "https://jsonmock.hackerrank.com/api/inventory";
-	   RestTemplate restTemplate = new RestTemplate();
-	   String result = restTemplate.getForObject(uri, String.class);			
-	   JSONObject root = new JSONObject(result);
-	   
-	   JSONArray data = root.getJSONArray("data");
-	   
-	   
+	@Autowired
+	private ProductService productService;
+
+
 		
 		@CrossOrigin
 		@GetMapping("/filter/price/{initial_price}/{final_price}")  
@@ -58,7 +55,7 @@ public class SampleController {
 			
 			try {
 
-				return ResponseEntity.ok(new SortedProducts[] {});
+				return ResponseEntity.ok(productService.getAllSortedProducts());
 			    
 			}catch(Exception E)
 				{
