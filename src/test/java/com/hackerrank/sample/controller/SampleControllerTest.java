@@ -3,7 +3,8 @@ package com.hackerrank.sample.controller;
 import com.hackerrank.sample.dto.SortedProducts;
 import com.hackerrank.sample.service.ProductService;
 import com.jayway.jsonpath.JsonPath;
-import org.junit.Test;
+
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -23,6 +24,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(MockitoExtension.class)
 public class SampleControllerTest {
 
+  @Autowired
+  MockMvc mockMvc;
+
   @MockBean // mock won't work why
   private ProductService productService;
 
@@ -30,8 +34,7 @@ public class SampleControllerTest {
   private SampleController sampleController;
 
 
-  @Autowired
-  MockMvc mockMvc;
+
 
   @Test
   public void sorted_books_success() throws Exception {
