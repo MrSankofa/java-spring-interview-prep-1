@@ -52,6 +52,7 @@ class SampleControllerIntegrationTest {
     mockProduct.setDiscount(7);
     mockProduct.setAvailable(10);
     mockProduct.setLocationURI(new URI("http://localhost/product/123456789")); // Simulated generated URI
+    mockProduct.setId("128393848");
 
 
     when(productService.createProduct(any(Product.class))).thenReturn(mockProduct);
@@ -73,6 +74,6 @@ class SampleControllerIntegrationTest {
         )
         .andExpect(status().isCreated())
         .andExpect(header().exists("location"))
-        .andExpect(header().string("location", "http://localhost/product/123456789"));
+        .andExpect(header().string("location", "http://localhost/product/128393848"));
   }
 }
