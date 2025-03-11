@@ -4,10 +4,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.hackerrank.sample.service.ProductService;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,12 +25,8 @@ import com.hackerrank.sample.dto.Product;
 public class SampleController {
 
 	
-	   final String uri = "https://jsonmock.hackerrank.com/api/inventory";
-	   RestTemplate restTemplate = new RestTemplate();
-	   String result = restTemplate.getForObject(uri, String.class);			
-	   JSONObject root = new JSONObject(result);
-	   
-	   JSONArray data = root.getJSONArray("data");
+	   @Autowired
+		 ProductService productService;
 	   
 	   
 		
@@ -37,11 +36,19 @@ public class SampleController {
 		{  
 			
 			try {
+
+				if(init_price > final_price) {
+					return ResponseEntity.badRequest().body(new ArrayList<>());
+				}
 				
 			
-					ArrayList<FilteredProducts> books = new ArrayList<FilteredProducts>();
+					ArrayList<FilteredProducts> books = productService.getFilteredProducts(init_price, final_price);
+
+				if(books.isEmpty()) {
+					return ResponseEntity.notFound().build();
+				}
 			
-				    return new ResponseEntity<ArrayList<FilteredProducts>>(books, HttpStatus.OK);
+				return new ResponseEntity<ArrayList<FilteredProducts>>(books, HttpStatus.OK);
 
 			   
 			    
@@ -57,11 +64,10 @@ public class SampleController {
 		@CrossOrigin
 		@GetMapping("/sort/price")  
 		private ResponseEntity<SortedProducts[]> sorted_books()   
-		{  
+		{
 			
 			try {
-
-				return ResponseEntity.ok(new SortedProducts[] {});
+				return ResponseEntity.ok(productService.getSortedProducts());
 			    
 			}catch(Exception E)
 				{
