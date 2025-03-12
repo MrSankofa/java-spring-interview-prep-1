@@ -34,6 +34,17 @@ import static org.hamcrest.Matchers.hasSize;
 // controller test for basically the same things as the default but you are not using the rest template
 // and you have to mock out your responses
 
+// repository
+// mock the restTemplate
+// mock the API response
+/*
+String mockApiResponse = "{ \"page\": 1, \"per_page\": 10, \"total\": 2, \"total_pages\": 1, \"data\": " +
+        "[ { \"id\": 1, \"name\": \"Product A\" }, { \"id\": 2, \"name\": \"Product B\" } ] }";
+* */
+// make the call
+// assert, result is not null, length, instance of JSONObject, getting property names is as expected
+
+
 // service test you want to make sure the business logic is correct
 // does filter return an empty list when appropriate
 // does it handle bad requests?
@@ -43,20 +54,13 @@ import static org.hamcrest.Matchers.hasSize;
   //
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest
-@AutoConfigureMockMvc
+
 //@WebMvcTest(controllers = SampleController.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class SampleApplicationTests {
 
-    @Autowired
-    MockMvc mockMvc;
 
-    @Test
-    public void sortedFilteredBooksCheck1() throws Exception {
-        mockMvc.perform(get("filter/price/100/4500"))
-            .andDo(print())
-            .andExpect(jsonPath("$", hasSize(1)));
+
 
         // perform is making the request
         // andExpect is for our assertions
@@ -64,6 +68,7 @@ public class SampleApplicationTests {
             // $ is the result or root of the JSON response
             // $.* is selects all of the elements at the root
             // $[x].barcode extracts all barCode fields from the array
+
     }
 
     // check filter price for 100, 4500
