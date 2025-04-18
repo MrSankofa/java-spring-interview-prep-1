@@ -48,6 +48,7 @@ public class SampleApplicationTests {
     @Test
     @DisplayName("Filter Price Check 2")   
     public void FilterPriceCheck2() throws Exception {
+        
         mockMvc.perform(get("/filter/price/100/101"))
                 .andDo(print())
                 .andExpect(status().is4xxClientError());
